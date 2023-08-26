@@ -4,11 +4,19 @@ import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 	"os"
 )
 
 var DB *gorm.DB
+
+var DisableLogger = logger.New(
+	nil, // Use the default logger output, which is discarded
+	logger.Config{
+		LogLevel: logger.Silent,
+	},
+)
 
 func SetupDB() *gorm.DB {
 	var dbHost = os.Getenv("DB_HOST")
@@ -19,7 +27,9 @@ func SetupDB() *gorm.DB {
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", dbHost, dbUsername, dbPassword, dbName, dbPort)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: DisableLogger,
+	})
 
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())
