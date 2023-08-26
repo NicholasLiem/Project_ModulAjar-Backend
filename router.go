@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/NicholasLiem/GoLang_Microservice/middleware"
+	"github.com/NicholasLiem/GoLang_Microservice/pdfgenerator"
 	customRouter "github.com/NicholasLiem/GoLang_Microservice/router"
 	"github.com/NicholasLiem/GoLang_Microservice/user"
 	"github.com/NicholasLiem/GoLang_Microservice/utils/jwt"
@@ -13,7 +14,7 @@ func NewRouter() *mux.Router {
 
 	router := mux.NewRouter()
 
-	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes, jwt.Routes)
+	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes, jwt.Routes, pdfgenerator.Routes)
 	for _, route := range customRouter.AppRoutes {
 
 		//create sub route

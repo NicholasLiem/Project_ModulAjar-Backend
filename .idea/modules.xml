@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GoLang_Microservice.iml" filepath="$PROJECT_DIR$/.idea/GoLang_Microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Project_ModulAjar-Backend.iml" filepath="$PROJECT_DIR$/.idea/Project_ModulAjar-Backend.iml" />
     </modules>
   </component>
 </project>
