@@ -1,13 +1,13 @@
 package pdfgenerator
 
 import (
-	"github.com/NicholasLiem/GoLang_Microservice/database"
+	"github.com/NicholasLiem/ModulAjar_Backend/database"
 	"gorm.io/gorm"
 )
 
 type Document struct {
 	gorm.Model
-	DocumentID   uint    `gorm:"primary_key" json:"document_id,omitempty"`
+	DocumentID   uint    `gorm:"uniqueIndex:document_id" json:"document_id,omitempty"`
 	UserRefer    uint    `json:"user_refer,omitempty"`
 	DocumentPath *string `gorm:"column:document_path" json:"document_path,omitempty"`
 }

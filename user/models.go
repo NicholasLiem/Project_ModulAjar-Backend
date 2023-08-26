@@ -2,22 +2,22 @@ package user
 
 import (
 	"errors"
-	"github.com/NicholasLiem/GoLang_Microservice/database"
-	"github.com/NicholasLiem/GoLang_Microservice/pdfgenerator"
+	"github.com/NicholasLiem/ModulAjar_Backend/database"
+	"github.com/NicholasLiem/ModulAjar_Backend/pdfgenerator"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type UserModel struct {
 	gorm.Model
-	UserID       uint                    `gorm:"primary_key" json:"user_id,omitempty"`
+	UserID       uint                    `gorm:"primaryIndex:user_id" json:"user_id,omitempty"`
 	Username     string                  `gorm:"column:username" json:"username,omitempty"`
 	Email        string                  `gorm:"column:email;unique_index" json:"email,omitempty"`
 	PasswordHash string                  `gorm:"column:password;not null" json:"password_hash,omitempty"`
 	Documents    []pdfgenerator.Document `gorm:"foreignKey:UserRefer;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"documents,omitempty"`
 }
 
-func (model *UserModel) setPassword(password string) error {
+func (model *UserModel) SetPassword(password string) error {
 	if len(password) == 0 {
 		return errors.New("password can not be empty")
 	}
@@ -28,7 +28,7 @@ func (model *UserModel) setPassword(password string) error {
 	return nil
 }
 
-func (model *UserModel) checkPassword(password string) error {
+func (model *UserModel) CheckPassword(password string) error {
 	bytePassword := []byte(password)
 	byteHashedPassword := []byte(model.PasswordHash)
 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)

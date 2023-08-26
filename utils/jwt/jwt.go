@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	response "github.com/NicholasLiem/GoLang_Microservice/http"
+	response "github.com/NicholasLiem/ModulAjar_Backend/http"
 	"github.com/golang-jwt/jwt/v5"
 )
 

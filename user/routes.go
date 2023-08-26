@@ -1,6 +1,6 @@
 package user
 
-import "github.com/NicholasLiem/GoLang_Microservice/router"
+import "github.com/NicholasLiem/ModulAjar_Backend/router"
 
 var Routes = router.RoutePrefix{
 	Prefix: "/v1/user",

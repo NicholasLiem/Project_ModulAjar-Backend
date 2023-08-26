@@ -1,7 +1,7 @@
 package pdfgenerator
 
 import (
-	response "github.com/NicholasLiem/GoLang_Microservice/http"
+	response "github.com/NicholasLiem/ModulAjar_Backend/http"
 	"github.com/go-pdf/fpdf"
 	"net/http"
 	"os"

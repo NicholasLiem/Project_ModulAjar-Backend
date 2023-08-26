@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/NicholasLiem/GoLang_Microservice/router"
+import "github.com/NicholasLiem/ModulAjar_Backend/router"
 
 var Routes = router.RoutePrefix{
 	Prefix: "/v1/auth",
@@ -9,7 +9,14 @@ var Routes = router.RoutePrefix{
 			"Login",
 			"POST",
 			"/login",
-			nil,
+			LoginHandler,
+			false,
+		},
+		{
+			"Register",
+			"POST",
+			"/register/{user_id}",
+			RegisterHandler,
 			false,
 		},
 	},

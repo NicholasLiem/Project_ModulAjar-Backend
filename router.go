@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/NicholasLiem/GoLang_Microservice/middleware"
-	"github.com/NicholasLiem/GoLang_Microservice/pdfgenerator"
-	customRouter "github.com/NicholasLiem/GoLang_Microservice/router"
-	"github.com/NicholasLiem/GoLang_Microservice/user"
-	"github.com/NicholasLiem/GoLang_Microservice/utils/jwt"
+	"github.com/NicholasLiem/ModulAjar_Backend/auth"
+	"github.com/NicholasLiem/ModulAjar_Backend/middleware"
+	"github.com/NicholasLiem/ModulAjar_Backend/pdfgenerator"
+	customRouter "github.com/NicholasLiem/ModulAjar_Backend/router"
+	"github.com/NicholasLiem/ModulAjar_Backend/user"
+	"github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -14,7 +15,7 @@ func NewRouter() *mux.Router {
 
 	router := mux.NewRouter()
 
-	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes, jwt.Routes, pdfgenerator.Routes)
+	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes, jwt.Routes, pdfgenerator.Routes, auth.Routes)
 	for _, route := range customRouter.AppRoutes {
 
 		//create sub route

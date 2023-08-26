@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/NicholasLiem/GoLang_Microservice/database"
-	"github.com/NicholasLiem/GoLang_Microservice/pdfgenerator"
-	"github.com/NicholasLiem/GoLang_Microservice/user"
+	"github.com/NicholasLiem/ModulAjar_Backend/database"
+	"github.com/NicholasLiem/ModulAjar_Backend/pdfgenerator"
+	"github.com/NicholasLiem/ModulAjar_Backend/user"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 	"log"
