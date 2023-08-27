@@ -8,9 +8,7 @@ import (
 )
 
 func GenPDFHandler(rw http.ResponseWriter, r *http.Request) {
-	rw.Header().Set("Content-Type", "application/json")
-
-	pdf := fpdf.New("P", "mm", "A4", "")
+	pdf := fpdf.New(fpdf.OrientationPortrait, "mm", "A4", "")
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
 	pdf.Cell(40, 10, "Hello, world")
