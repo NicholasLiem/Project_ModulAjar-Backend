@@ -28,7 +28,7 @@ func main() {
 
 	log.Println("Running the server on port " + port)
 
-	log.Fatal(http.ListenAndServe("127.0.0.1:"+port, router))
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 func Migrate(db *gorm.DB) {
