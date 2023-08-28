@@ -1,7 +1,7 @@
-package pdfgenerator
+package service
 
 import (
-	response "github.com/NicholasLiem/ModulAjar_Backend/http"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
 	"github.com/go-pdf/fpdf"
 	"net/http"
 	"os"

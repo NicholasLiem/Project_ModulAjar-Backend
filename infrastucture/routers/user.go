@@ -1,36 +1,39 @@
-package user
+package routers
 
-import "github.com/NicholasLiem/ModulAjar_Backend/router"
+import (
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/service"
+)
 
-var Routes = router.RoutePrefix{
+var UserRoutes = router.RoutePrefix{
 	Prefix: "/v1/user",
 	SubRoutes: []router.Route{
 		{
 			"Create a new user",
 			"POST",
 			"/{user_id}",
-			CreateUserHandler,
+			service.CreateUserHandler,
 			false,
 		},
 		{
 			"Find a user by id",
 			"GET",
 			"/{user_id}",
-			FindUserByIdHandler,
+			service.FindUserByIdHandler,
 			true,
 		},
 		{
 			"Delete user by id",
 			"DELETE",
 			"/{user_id}",
-			DeleteUserByIdHandler,
+			service.DeleteUserByIdHandler,
 			true,
 		},
 		{
 			"Update user by id",
 			"PUT",
 			"/{user_id}",
-			UpdateUserHandler,
+			service.UpdateUserHandler,
 			true,
 		},
 	},

@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/database"
-	"github.com/NicholasLiem/ModulAjar_Backend/pdfgenerator"
-	"github.com/NicholasLiem/ModulAjar_Backend/user"
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 	"log"
@@ -24,7 +24,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	router := NewRouter()
+	router := infrastucture.NewRouter()
 
 	log.Println("Running the server on port " + port)
 
@@ -32,11 +32,11 @@ func main() {
 }
 
 func Migrate(db *gorm.DB) {
-	errPdf := db.AutoMigrate(&pdfgenerator.Document{})
+	errPdf := db.AutoMigrate(&datastruct.Document{})
 	if errPdf != nil {
 		return
 	}
-	err := db.AutoMigrate(&user.UserModel{})
+	err := db.AutoMigrate(&datastruct.UserModel{})
 	if err != nil {
 		return
 	}

@@ -1,20 +1,19 @@
-package user
+package datastruct
 
 import (
 	"errors"
 	"github.com/NicholasLiem/ModulAjar_Backend/database"
-	"github.com/NicholasLiem/ModulAjar_Backend/pdfgenerator"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type UserModel struct {
 	gorm.Model
-	UserID       uint                    `gorm:"primaryIndex:user_id" json:"user_id,omitempty"`
-	Username     string                  `gorm:"column:username" json:"username,omitempty"`
-	Email        string                  `gorm:"column:email;unique_index" json:"email,omitempty"`
-	PasswordHash string                  `gorm:"column:password;not null" json:"password_hash,omitempty"`
-	Documents    []pdfgenerator.Document `gorm:"foreignKey:UserRefer;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"documents,omitempty"`
+	UserID       uint       `gorm:"primaryIndex:user_id" json:"user_id,omitempty"`
+	Username     string     `gorm:"column:username" json:"username,omitempty"`
+	Email        string     `gorm:"column:email;unique_index" json:"email,omitempty"`
+	PasswordHash string     `gorm:"column:password;not null" json:"password_hash,omitempty"`
+	Documents    []Document `gorm:"foreignKey:UserRefer;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"documents,omitempty"`
 }
 
 func (model *UserModel) SetPassword(password string) error {
@@ -67,7 +66,7 @@ func (model *UserModel) Delete() error {
 func (model *UserModel) AddDocument(data interface{}) error {
 	db := database.DB
 
-	document := pdfgenerator.Document{
+	document := Document{
 		UserRefer: model.UserID,
 	}
 
@@ -89,10 +88,10 @@ func (model *UserModel) AddDocument(data interface{}) error {
 	return nil
 }
 
-func (model *UserModel) GetDocuments() []pdfgenerator.Document {
+func (model *UserModel) GetDocuments() []Document {
 	db := database.DB
 
-	var documents []pdfgenerator.Document
+	var documents []Document
 	err := db.Model(model).Association("Documents").Find(&documents)
 
 	if err != nil {

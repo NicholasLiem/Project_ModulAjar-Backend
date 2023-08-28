@@ -1,10 +1,11 @@
-package auth
+package service
 
 import (
 	"encoding/json"
-	response "github.com/NicholasLiem/ModulAjar_Backend/http"
-	"github.com/NicholasLiem/ModulAjar_Backend/middleware"
-	"github.com/NicholasLiem/ModulAjar_Backend/user"
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/middleware"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
 	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -13,7 +14,7 @@ import (
 )
 
 func LoginHandler(rw http.ResponseWriter, r *http.Request) {
-	var loginData LoginDTO
+	var loginData dto.LoginDTO
 	err := json.NewDecoder(r.Body).Decode(&loginData)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to login")
@@ -24,14 +25,14 @@ func LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	Check Identifier By Email or Username
 	*/
 
-	var condition user.UserModel
+	var condition datastruct.UserModel
 	if strings.Contains(loginData.Identifier, "@") {
-		condition = user.UserModel{Email: loginData.Identifier}
+		condition = datastruct.UserModel{Email: loginData.Identifier}
 	} else {
-		condition = user.UserModel{Username: loginData.Identifier}
+		condition = datastruct.UserModel{Username: loginData.Identifier}
 	}
 
-	userData, err := user.FindOneUser(condition)
+	userData, err := datastruct.FindOneUser(condition)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusUnauthorized, "Invalid credentials")
 		return
@@ -71,13 +72,13 @@ func RegisterHandler(rw http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id := params["user_id"]
 
-	userID, err := user.VerifyUserId(id)
+	userID, err := VerifyUserId(id)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid user ID")
 		return
 	}
 
-	var registerData RegisterDTO
+	var registerData dto.RegisterDTO
 	err = json.NewDecoder(r.Body).Decode(&registerData)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid request")
@@ -99,7 +100,7 @@ func RegisterHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userModel := user.UserModel{
+	userModel := datastruct.UserModel{
 		UserID:   uint(userID),
 		Username: registerData.Username,
 		Email:    registerData.Email,
@@ -111,7 +112,7 @@ func RegisterHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = user.CreateUser(&userModel)
+	err = datastruct.CreateUser(&userModel)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusInternalServerError, "Failed to create user")
 		return

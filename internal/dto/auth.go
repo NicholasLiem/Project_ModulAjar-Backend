@@ -1,4 +1,4 @@
-package auth
+package dto
 
 type LoginDTO struct {
 	Identifier string `json:"identifier,omitempty"`

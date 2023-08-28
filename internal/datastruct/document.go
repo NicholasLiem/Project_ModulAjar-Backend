@@ -1,4 +1,4 @@
-package pdfgenerator
+package datastruct
 
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/database"

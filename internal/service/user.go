@@ -1,9 +1,11 @@
-package user
+package service
 
 import (
 	"encoding/json"
 	"errors"
-	response "github.com/NicholasLiem/ModulAjar_Backend/http"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
@@ -19,14 +21,14 @@ func CreateUserHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var newUser CreateUserDTO
+	var newUser dto.CreateUserDTO
 	err = json.NewDecoder(r.Body).Decode(&newUser)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to decode user")
 		return
 	}
 
-	userModel := UserModel{
+	userModel := datastruct.UserModel{
 		UserID:   uint(userID),
 		Username: newUser.Username,
 		Email:    newUser.Email,
@@ -37,7 +39,7 @@ func CreateUserHandler(rw http.ResponseWriter, r *http.Request) {
 		response.ErrorResponse(rw, http.StatusInternalServerError, "Failed to set password")
 		return
 	}
-	err = CreateUser(&userModel)
+	err = datastruct.CreateUser(&userModel)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusInternalServerError, "Failed to create user")
 		return
@@ -57,9 +59,9 @@ func FindUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	condition := UserModel{UserID: uint(userID)}
+	condition := datastruct.UserModel{UserID: uint(userID)}
 
-	foundUser, err := FindOneUser(condition)
+	foundUser, err := datastruct.FindOneUser(condition)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
 		return
@@ -79,9 +81,9 @@ func DeleteUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	condition := UserModel{UserID: uint(userID)}
+	condition := datastruct.UserModel{UserID: uint(userID)}
 
-	foundUser, err := FindOneUser(condition)
+	foundUser, err := datastruct.FindOneUser(condition)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
 		return
@@ -109,15 +111,15 @@ func UpdateUserHandler(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	condition := UserModel{UserID: uint(userID)}
+	condition := datastruct.UserModel{UserID: uint(userID)}
 
-	foundUser, err := FindOneUser(condition)
+	foundUser, err := datastruct.FindOneUser(condition)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
 		return
 	}
 
-	var updateData UpdateUserDTO
+	var updateData dto.UpdateUserDTO
 	err = json.NewDecoder(r.Body).Decode(&updateData)
 	if err != nil {
 		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to decode update data")
