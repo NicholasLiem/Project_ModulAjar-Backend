@@ -4,7 +4,6 @@ import (
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/middleware"
 	customRouter "github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/routers"
-	"github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -13,7 +12,7 @@ func NewRouter() *mux.Router {
 
 	router := mux.NewRouter()
 
-	customRouter.AppRoutes = append(customRouter.AppRoutes, routers.Routes, jwt.Routes, routers.Routes, routers.Routes)
+	customRouter.AppRoutes = append(customRouter.AppRoutes, routers.UserRoutes)
 	for _, route := range customRouter.AppRoutes {
 
 		//create sub route

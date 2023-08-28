@@ -1,4 +1,4 @@
-package database
+package repository
 
 import (
 	"fmt"
@@ -9,6 +9,13 @@ import (
 	"os"
 )
 
+type DAO interface {
+	NewUserQuery() UserQuery
+}
+
+type dao struct {
+}
+
 var DB *gorm.DB
 
 var DisableLogger = logger.New(
@@ -17,6 +24,10 @@ var DisableLogger = logger.New(
 		LogLevel: logger.Silent,
 	},
 )
+
+func NewDAO() DAO {
+	return &dao{}
+}
 
 func SetupDB() *gorm.DB {
 	var dbHost = os.Getenv("DB_HOST")
@@ -46,4 +57,8 @@ func SetupDB() *gorm.DB {
 	sqlDB.SetMaxOpenConns(100)
 
 	return db
+}
+
+func (d *dao) NewUserQuery() UserQuery {
+	return &userQuery{}
 }

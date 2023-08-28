@@ -1,9 +1,6 @@
 package datastruct
 
-import (
-	"github.com/NicholasLiem/ModulAjar_Backend/database"
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type Document struct {
 	gorm.Model
@@ -12,9 +9,9 @@ type Document struct {
 	DocumentPath *string `gorm:"column:document_path" json:"document_path,omitempty"`
 }
 
-func FindOneDocumeent(condition interface{}) (Document, error) {
-	db := database.DB
-	var model Document
-	err := db.Where(condition).First(&model).Error
-	return model, err
-}
+//func FindOneDocumeent(condition interface{}) (Document, error) {
+//	db := repository.DB
+//	var model Document
+//	err := db.Where(condition).First(&model).Error
+//	return model, err
+//}

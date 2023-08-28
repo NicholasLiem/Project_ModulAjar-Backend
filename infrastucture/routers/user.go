@@ -2,7 +2,6 @@ package routers
 
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
-	"github.com/NicholasLiem/ModulAjar_Backend/internal/service"
 )
 
 var UserRoutes = router.RoutePrefix{
@@ -12,29 +11,29 @@ var UserRoutes = router.RoutePrefix{
 			"Create a new user",
 			"POST",
 			"/{user_id}",
-			service.CreateUserHandler,
+			nil,
 			false,
 		},
-		{
-			"Find a user by id",
-			"GET",
-			"/{user_id}",
-			service.FindUserByIdHandler,
-			true,
-		},
-		{
-			"Delete user by id",
-			"DELETE",
-			"/{user_id}",
-			service.DeleteUserByIdHandler,
-			true,
-		},
-		{
-			"Update user by id",
-			"PUT",
-			"/{user_id}",
-			service.UpdateUserHandler,
-			true,
-		},
+		//{
+		//	"Find a user by id",
+		//	"GET",
+		//	"/{user_id}",
+		//	service.FindUserByIdHandler,
+		//	true,
+		//},
+		//{
+		//	"Delete user by id",
+		//	"DELETE",
+		//	"/{user_id}",
+		//	service.DeleteUserByIdHandler,
+		//	true,
+		//},
+		//{
+		//	"Update user by id",
+		//	"PUT",
+		//	"/{user_id}",
+		//	service.UpdateUserHandler,
+		//	true,
+		//},
 	},
 }
