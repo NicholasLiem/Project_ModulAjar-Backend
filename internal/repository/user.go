@@ -23,7 +23,7 @@ func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
 		return nil, err
 	}
 
-	return &newUser.UserID, nil
+	return &newUser.ID, nil
 }
 
 //func (u *userQuery) GetUser(condition interface{}) (datastruct.UserModel, error) {
