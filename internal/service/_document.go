@@ -1,7 +1,7 @@
 package service
 
 import (
-	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
 	"github.com/go-pdf/fpdf"
 	"net/http"
 	"os"

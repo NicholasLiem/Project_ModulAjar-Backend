@@ -5,7 +5,7 @@ import (
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/middleware"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
-	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
 	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/gorilla/mux"
 	"net/http"

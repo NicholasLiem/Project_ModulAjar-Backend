@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
 	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"net/http"
 	"strings"
