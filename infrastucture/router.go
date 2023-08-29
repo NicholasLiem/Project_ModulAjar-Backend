@@ -1,21 +1,22 @@
-package main
+package infrastucture
 
 import (
-	"github.com/NicholasLiem/ModulAjar_Backend/auth"
-	"github.com/NicholasLiem/ModulAjar_Backend/middleware"
-	"github.com/NicholasLiem/ModulAjar_Backend/pdfgenerator"
-	customRouter "github.com/NicholasLiem/ModulAjar_Backend/router"
-	"github.com/NicholasLiem/ModulAjar_Backend/user"
-	"github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/middleware"
+	customRouter "github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/routers"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
-func NewRouter() *mux.Router {
+func NewRouter(server app.MicroserviceServer) *mux.Router {
 
 	router := mux.NewRouter()
 
-	customRouter.AppRoutes = append(customRouter.AppRoutes, user.Routes, jwt.Routes, pdfgenerator.Routes, auth.Routes)
+	customRouter.AppRoutes = append(customRouter.AppRoutes,
+		routers.UserRoutes(server),
+	)
+
 	for _, route := range customRouter.AppRoutes {
 
 		//create sub route

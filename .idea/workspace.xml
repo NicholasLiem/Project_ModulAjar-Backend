@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="933a09d9-8915-4a5c-8ed7-7ca68f6e8032" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test/pdf_gen.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/app/update_user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pdfgenerator/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/pdfgenerator/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infrastucture/routers/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/infrastucture/routers/auth.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infrastucture/routers/pdfgenerator.go" beforeDir="false" afterPath="$PROJECT_DIR$/infrastucture/routers/pdfgenerator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infrastucture/routers/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/infrastucture/routers/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/create_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/create_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/dto/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/dto/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +24,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Go File" />
         <option value="Go Application" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -37,27 +44,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultGoTemplateProperty": "Go Application",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/nicho/Desktop/Programming Repository/GitHub Repository/Project_ModulAjar-Backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nicho/Desktop/Programming Repository/GitHub Repository/Project_ModulAjar-Backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\nicho\Desktop\Programming Repository\GitHub Repository\Project_ModulAjar-Backend" />
       <recent name="C:\Users\nicho\Desktop\Programming Repository\GitHub Repository\Project_ModulAjar-Backend\pdfgenerator" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\nicho\Desktop\Programming Repository\GitHub Repository\Project_ModulAjar-Backend\internal\app" />
+      <recent name="C:\Users\nicho\Desktop\Programming Repository\GitHub Repository\Project_ModulAjar-Backend\internal\handlers" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

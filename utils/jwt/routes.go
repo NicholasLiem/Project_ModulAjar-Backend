@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	"github.com/NicholasLiem/ModulAjar_Backend/router"
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
 )
 
 var Routes = router.RoutePrefix{
