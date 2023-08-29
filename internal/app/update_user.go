@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
-	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
+	"github.com/NicholasLiem/ModulAjar_Backend/utils"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -13,7 +14,7 @@ func (m *MicroserviceServer) UpdateUser(w http.ResponseWriter, r *http.Request) 
 	params := mux.Vars(r)
 	id := params["user_id"]
 
-	userID, err := VerifyUserId(id)
+	userID, err := utils.VerifyUserId(id)
 	if err != nil {
 		response.ErrorResponse(w, http.StatusBadRequest, "Invalid user ID")
 		return

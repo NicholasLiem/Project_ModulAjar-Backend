@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	response "github.com/NicholasLiem/ModulAjar_Backend/utils"
+	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
 	"net/http"
 	"os"
 	"time"

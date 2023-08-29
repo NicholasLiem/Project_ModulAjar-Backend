@@ -41,41 +41,6 @@ func (u *userService) UpdateUser(user datastruct.UserModel) error {
 	return err
 }
 
-//func UpdateUserHandler(rw http.ResponseWriter, r *http.Request) {
-//	params := mux.Vars(r)
-//	id := params["user_id"]
-//
-//	userID, err := VerifyUserId(id)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid user ID")
-//		return
-//	}
-//
-//	condition := datastruct.UserModel{UserID: uint(userID)}
-//
-//	foundUser, err := datastruct.FindOneUser(condition)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
-//		return
-//	}
-//
-//	var updateData dto.UpdateUserDTO
-//	err = json.NewDecoder(r.Body).Decode(&updateData)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to decode update data")
-//		return
-//	}
-//
-//	err = foundUser.Update(updateData)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to update update data")
-//		return
-//	}
-//
-//	response.SuccessResponse(rw, http.StatusOK, "Updated user data", updateData)
-//}
-
-//
 //func FindUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
 //	params := mux.Vars(r)
 //	id := params["user_id"]
@@ -97,7 +62,7 @@ func (u *userService) UpdateUser(user datastruct.UserModel) error {
 //	response.SuccessResponse(rw, http.StatusOK, "User found", foundUser)
 //	return
 //}
-//
+
 //func DeleteUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
 //	params := mux.Vars(r)
 //	id := params["user_id"]
