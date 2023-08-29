@@ -56,6 +56,10 @@ func main() {
 	*/
 	port := os.Getenv("PORT")
 	log.Println("Running the server on port " + port)
+
+	if os.Getenv("ENVIRONMENT") == "DEV" {
+		log.Fatal(http.ListenAndServe("127.0.0.1:"+port, serverRouter))
+	}
 	log.Fatal(http.ListenAndServe(":"+port, serverRouter))
 }
 

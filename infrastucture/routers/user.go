@@ -16,6 +16,13 @@ func UserRoutes(server app.MicroserviceServer) router.RoutePrefix {
 				server.CreateUser,
 				false,
 			},
+			{
+				"Update a user",
+				"PUT",
+				"/{user_id}",
+				server.UpdateUser,
+				false,
+			},
 		},
 	}
 }

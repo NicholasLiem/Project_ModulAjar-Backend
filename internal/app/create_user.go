@@ -24,7 +24,7 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 	var newUser dto.CreateUserDTO
 	err = json.NewDecoder(r.Body).Decode(&newUser)
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, "Fail to decode user")
+		response.ErrorResponse(w, http.StatusBadRequest, "Fail to decode user")
 		return
 	}
 
@@ -32,6 +32,7 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 		UserID:   uint(userID),
 		Username: newUser.Username,
 		Email:    newUser.Email,
+		Password: newUser.Password,
 	}
 
 	err = m.userService.CreateUser(userModel)

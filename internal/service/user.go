@@ -8,6 +8,7 @@ import (
 
 type UserService interface {
 	CreateUser(user datastruct.UserModel) error
+	UpdateUser(user datastruct.UserModel) error
 }
 
 type userService struct {
@@ -28,6 +29,51 @@ func (u *userService) CreateUser(user datastruct.UserModel) error {
 	_, err = u.dao.NewUserQuery().CreateUser(user)
 	return err
 }
+
+func (u *userService) UpdateUser(user datastruct.UserModel) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
+	if err != nil {
+		return err
+	}
+
+	user.Password = string(hashedPassword)
+	err = u.dao.NewUserQuery().UpdateUser(user)
+	return err
+}
+
+//func UpdateUserHandler(rw http.ResponseWriter, r *http.Request) {
+//	params := mux.Vars(r)
+//	id := params["user_id"]
+//
+//	userID, err := VerifyUserId(id)
+//	if err != nil {
+//		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid user ID")
+//		return
+//	}
+//
+//	condition := datastruct.UserModel{UserID: uint(userID)}
+//
+//	foundUser, err := datastruct.FindOneUser(condition)
+//	if err != nil {
+//		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
+//		return
+//	}
+//
+//	var updateData dto.UpdateUserDTO
+//	err = json.NewDecoder(r.Body).Decode(&updateData)
+//	if err != nil {
+//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to decode update data")
+//		return
+//	}
+//
+//	err = foundUser.Update(updateData)
+//	if err != nil {
+//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to update update data")
+//		return
+//	}
+//
+//	response.SuccessResponse(rw, http.StatusOK, "Updated user data", updateData)
+//}
 
 //
 //func FindUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
@@ -82,36 +128,3 @@ func (u *userService) CreateUser(user datastruct.UserModel) error {
 //	return
 //}
 //
-//func UpdateUserHandler(rw http.ResponseWriter, r *http.Request) {
-//	params := mux.Vars(r)
-//	id := params["user_id"]
-//
-//	userID, err := VerifyUserId(id)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid user ID")
-//		return
-//	}
-//
-//	condition := datastruct.UserModel{UserID: uint(userID)}
-//
-//	foundUser, err := datastruct.FindOneUser(condition)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
-//		return
-//	}
-//
-//	var updateData dto.UpdateUserDTO
-//	err = json.NewDecoder(r.Body).Decode(&updateData)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to decode update data")
-//		return
-//	}
-//
-//	err = foundUser.Update(updateData)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to update update data")
-//		return
-//	}
-//
-//	response.SuccessResponse(rw, http.StatusOK, "Updated user data", updateData)
-//}

@@ -6,6 +6,7 @@ import (
 
 type UserQuery interface {
 	CreateUser(user datastruct.UserModel) (*uint, error)
+	UpdateUser(user datastruct.UserModel) error
 }
 
 type userQuery struct{}
@@ -24,6 +25,12 @@ func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
 	}
 
 	return &newUser.ID, nil
+}
+
+func (u *userQuery) UpdateUser(user datastruct.UserModel) error {
+	db := DB
+	err := db.Model(datastruct.UserModel{}).Where("user_id = ?", user.UserID).Updates(user).Error
+	return err
 }
 
 //func (u *userQuery) GetUser(condition interface{}) (datastruct.UserModel, error) {
