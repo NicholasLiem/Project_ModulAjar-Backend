@@ -2,13 +2,14 @@ package service
 
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
 	CreateUser(user datastruct.UserModel) error
-	UpdateUser(user datastruct.UserModel) error
+	UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error)
 }
 
 type userService struct {
@@ -30,15 +31,15 @@ func (u *userService) CreateUser(user datastruct.UserModel) error {
 	return err
 }
 
-func (u *userService) UpdateUser(user datastruct.UserModel) error {
+func (u *userService) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	user.Password = string(hashedPassword)
-	err = u.dao.NewUserQuery().UpdateUser(user)
-	return err
+	updatedUser, err := u.dao.NewUserQuery().UpdateUser(user)
+	return updatedUser, err
 }
 
 //func FindUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
