@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"fmt"
+	"context"
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
 	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
+	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"net/http"
 	"strings"
 )
@@ -12,18 +13,20 @@ func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		tokenStr := DecodeJWTToken(r)
 		if tokenStr == "" {
-			response.ErrorResponse(rw, http.StatusUnauthorized, "Fail to verify JWT Token")
+			response.ErrorResponse(rw, http.StatusUnauthorized, messages.JWTClaimError)
 			return
 		}
 
 		claims, err := jwt2.VerifyJWT(tokenStr)
 
 		if err != nil {
-			response.ErrorResponse(rw, http.StatusUnauthorized, "Fail to verify JWT token: "+err.Error())
+			response.ErrorResponse(rw, http.StatusUnauthorized, messages.JWTClaimError)
 			return
 		}
 
-		fmt.Println(claims)
+		ctx := context.WithValue(r.Context(), "jwtClaims", claims)
+		r = r.WithContext(ctx)
+
 		next.ServeHTTP(rw, r)
 	})
 }

@@ -5,13 +5,16 @@ package messages
 Error messages
 */
 const (
-	FailToParseUserID  = "Failed to parse user ID"
-	InvalidRequestData = "Failed to parse request data"
-	FailToCreateUser   = "Failed to create new user"
-	FailToDeleteUser   = "Failed to delete a user"
-	FailToUpdateUser   = "Failed to update user"
-	UnsuccessfulLogin  = "Login attempt failed"
-	FailToRegister     = "Registration attempt failed"
+	FailToParseUserID    = "Failed to parse user ID"
+	InvalidRequestData   = "Failed to parse request data"
+	FailToCreateUser     = "Failed to create new user"
+	FailToDeleteUser     = "Failed to delete a user"
+	FailToUpdateUser     = "Failed to update user"
+	UnsuccessfulLogin    = "Login attempt failed"
+	FailToRegister       = "Registration attempt failed"
+	JWTClaimError        = "JWT claim error"
+	AllFieldMustBeFilled = "All field must be filled"
+	AlreadyLoggedIn      = "Already logged in"
 )
 
 /*

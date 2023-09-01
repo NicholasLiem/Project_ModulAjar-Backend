@@ -9,6 +9,7 @@ import (
 	"github.com/NicholasLiem/ModulAjar_Backend/utils"
 	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"golang.org/x/crypto/bcrypt"
+	"strconv"
 )
 
 type AuthService interface {
@@ -35,7 +36,8 @@ func (a *authService) SignIn(loginDTO dto.LoginDTO) (*string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("passwords dont match %v", err)
 	} else {
-		jwt, err := jwt2.CreateJWT()
+		userData, err := a.dao.NewUserQuery().GetUserByEmail(loginDTO.Email)
+		jwt, err := jwt2.CreateJWT(strconv.Itoa(int(userData.UserID)), userData.Email, string(userData.Role))
 		if err != nil {
 			return nil, err
 		}
@@ -57,27 +59,15 @@ func (a *authService) SignUp(model datastruct.UserModel) (*string, error) {
 
 	model.Password = string(hashedPassword)
 
-	_, err = a.dao.NewUserQuery().CreateUser(model)
+	userData, err := a.dao.NewUserQuery().CreateUser(model)
 	if err != nil {
 		return nil, err
 	}
 
-	jwt, err := jwt2.CreateJWT()
+	jwt, err := jwt2.CreateJWT(strconv.Itoa(int(userData.UserID)), userData.Email, string(userData.Role))
 	if err != nil {
 		return nil, err
 	}
 
 	return &jwt.Token, nil
 }
-
-//func hasValidToken(r *http.Request) bool {
-//	tokenStr := middleware.DecodeJWTToken(r)
-//	claims, err := jwt2.VerifyJWT(tokenStr)
-//
-//	if err != nil || claims == nil {
-//		return false
-//	}
-//
-//	return true
-//}
-//

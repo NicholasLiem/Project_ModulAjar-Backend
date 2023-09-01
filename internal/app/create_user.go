@@ -28,10 +28,17 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	if newUser.Email == "" || newUser.FirstName == "" || newUser.LastName == "" || newUser.Password == "" {
+		response.ErrorResponse(w, http.StatusBadRequest, messages.AllFieldMustBeFilled)
+		return
+	}
+
 	userModel := datastruct.UserModel{
-		UserID:   userID,
-		Email:    newUser.Email,
-		Password: newUser.Password,
+		UserID:    userID,
+		FirstName: newUser.FirstName,
+		LastName:  newUser.LastName,
+		Email:     newUser.Email,
+		Password:  newUser.Password,
 	}
 
 	err = m.userService.CreateUser(userModel)

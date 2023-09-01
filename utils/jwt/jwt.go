@@ -1,8 +1,6 @@
 package jwt
 
 import (
-	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
-	"net/http"
 	"os"
 	"time"
 
@@ -13,11 +11,15 @@ type JWTToken struct {
 	Token string `json:"token"`
 }
 
-func CreateJWT() (JWTToken, error) {
+func CreateJWT(userID, email, role string) (JWTToken, error) {
+
 	signingKey := []byte(os.Getenv("JWT_SECRET"))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"exp":  time.Now().Add(time.Hour).Unix(),
-		"name": "Testing",
+		"user_id":   userID,
+		"email":     email,
+		"role":      role,
+		"logged_in": true,
+		"exp":       time.Now().Add(time.Hour).Unix(),
 	})
 
 	tokenString, err := token.SignedString(signingKey)
@@ -36,29 +38,4 @@ func VerifyJWT(tokenStr string) (jwt.Claims, error) {
 	}
 
 	return token.Claims, nil // Return claims directly
-}
-
-func GetJwt(rw http.ResponseWriter, r *http.Request) {
-	if apiKey := r.Header.Get("API_KEY"); apiKey != "" {
-		if apiKey == os.Getenv("API_KEY") {
-			token, err := CreateJWT()
-			if err != nil {
-				response.ErrorResponse(rw, http.StatusBadRequest, "Fail to generate JWT token")
-				return
-			}
-
-			responseJson := map[string]string{
-				"token": token.Token,
-			}
-
-			response.SuccessResponse(rw, http.StatusCreated, "Successfully generated JWT token", responseJson)
-			return
-		} else {
-			response.ErrorResponse(rw, http.StatusBadRequest, "Wrong API key")
-			return
-		}
-	} else {
-		response.ErrorResponse(rw, http.StatusBadRequest, "API key header not found")
-		return
-	}
 }

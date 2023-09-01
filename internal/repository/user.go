@@ -7,11 +7,12 @@ import (
 )
 
 type UserQuery interface {
-	CreateUser(user datastruct.UserModel) (*uint, error)
+	CreateUser(user datastruct.UserModel) (*datastruct.UserModel, error)
 	UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error)
 	DeleteUser(userID uint) (*datastruct.UserModel, error)
 	GetUser(userID uint) (*datastruct.UserModel, error)
 	GetUserPasswordByEmail(email string) (*string, error)
+	GetUserByEmail(email string) (*datastruct.UserModel, error)
 }
 
 type userQuery struct {
@@ -22,18 +23,19 @@ func NewUserQuery(db *gorm.DB) UserQuery {
 	return &userQuery{db: db}
 }
 
-func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
+func (u *userQuery) CreateUser(user datastruct.UserModel) (*datastruct.UserModel, error) {
 	newUser := datastruct.UserModel{
-		UserID:   user.UserID,
-		Email:    user.Email,
-		Password: user.Password,
+		UserID:    user.UserID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+		Password:  user.Password,
 	}
 
 	if err := u.db.Create(&newUser).Error; err != nil {
 		return nil, err
 	}
-
-	return &newUser.ID, nil
+	return &newUser, nil
 }
 
 func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error) {
@@ -75,10 +77,13 @@ func (u *userQuery) GetUser(userID uint) (*datastruct.UserModel, error) {
 func (u *userQuery) GetUserPasswordByEmail(email string) (*string, error) {
 	var password string
 	err := u.db.Model(&datastruct.UserModel{}).Where("email = ?", email).Select("password").Scan(&password).Error
-	if err != nil {
-		return nil, err
-	}
 	return &password, err
+}
+
+func (u *userQuery) GetUserByEmail(email string) (*datastruct.UserModel, error) {
+	var userData datastruct.UserModel
+	err := u.db.Where("email = ?", email).First(&userData).Error
+	return &userData, err
 }
 
 //func (model *UserModel) AddDocument(data interface{}) error {
