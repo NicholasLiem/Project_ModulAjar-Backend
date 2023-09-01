@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
@@ -16,6 +17,11 @@ import (
 func main() {
 
 	/**
+	Creating context
+	*/
+	ctx := context.Background()
+
+	/**
 	Loading .env file
 	*/
 	err := godotenv.Load()
@@ -24,14 +30,15 @@ func main() {
 	}
 
 	/**
-	Setting up DB
+	Setting up DB and redis
 	*/
-	repository.DB = repository.SetupDB()
+	db := repository.SetupDB()
+	redis := repository.SetupRedis(ctx)
 
 	/**
 	Registering DAO's and Services
 	*/
-	dao := repository.NewDAO()
+	dao := repository.NewDAO(db, redis)
 	userService := service.NewUserService(dao)
 	authService := service.NewAuthService(dao)
 
@@ -46,7 +53,7 @@ func main() {
 	/**
 	Run DB Migration
 	*/
-	Migrate(repository.DB)
+	Migrate(db)
 
 	/**
 	Setting up the router

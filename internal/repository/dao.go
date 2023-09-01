@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"context"
 	"fmt"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,10 +16,9 @@ type DAO interface {
 }
 
 type dao struct {
-	db *gorm.DB
+	db    *gorm.DB
+	redis *redis.Client
 }
-
-var DB *gorm.DB
 
 var DisableLogger = logger.New(
 	nil, // Use the default logger output, which is discarded
@@ -26,8 +27,11 @@ var DisableLogger = logger.New(
 	},
 )
 
-func NewDAO() DAO {
-	return &dao{db: DB}
+func NewDAO(db *gorm.DB, rc *redis.Client) DAO {
+	return &dao{
+		db:    db,
+		redis: rc,
+	}
 }
 
 func SetupDB() *gorm.DB {
@@ -58,6 +62,23 @@ func SetupDB() *gorm.DB {
 	sqlDB.SetMaxOpenConns(100)
 
 	return db
+}
+
+func SetupRedis(ctx context.Context) *redis.Client {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       10,
+	})
+
+	_, err := client.Ping(ctx).Result()
+	if err != nil {
+		panic("Failed to connect to Redis: " + err.Error())
+	}
+
+	log.Println("Successfully connected to Redis")
+
+	return client
 }
 
 func (d *dao) NewUserQuery() UserQuery {

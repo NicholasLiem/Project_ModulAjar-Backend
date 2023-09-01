@@ -2,3 +2,5 @@
 .env
 vendor/
 .idea/workspace.xml
+*.iml
+*.xml
