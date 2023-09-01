@@ -2,42 +2,39 @@ package app
 
 import (
 	"encoding/json"
-	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils"
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
+	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func (m *MicroserviceServer) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	id := params["user_id"]
 
-	userID, err := utils.VerifyUserId(id)
+	params := mux.Vars(r)
+	paramsUserID := params["user_id"]
+
+	userID, err := utils.VerifyUserId(paramsUserID)
 	if err != nil {
-		response.ErrorResponse(w, http.StatusBadRequest, "Invalid user ID")
+		response.ErrorResponse(w, http.StatusBadRequest, messages.FailToParseUserID)
 		return
 	}
 
 	var updateUser dto.UpdateUserDTO
 	err = json.NewDecoder(r.Body).Decode(&updateUser)
+	updateUser.UserID = userID
 	if err != nil {
-		response.ErrorResponse(w, http.StatusBadRequest, "Fail to update user "+err.Error())
-	}
-
-	updatedUser := datastruct.UserModel{
-		UserID:   uint(userID),
-		Username: updateUser.Username,
-		Password: updateUser.Password,
-	}
-
-	err = m.userService.UpdateUser(updatedUser)
-	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, "Fail to update user "+err.Error())
+		response.ErrorResponse(w, http.StatusBadRequest, messages.InvalidRequestData)
 		return
 	}
 
-	response.SuccessResponse(w, http.StatusOK, "Successfully updated the user", updateUser)
+	updatedUser, err := m.userService.UpdateUser(updateUser)
+	if err != nil || updatedUser == nil {
+		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToUpdateUser)
+		return
+	}
+
+	response.SuccessResponse(w, http.StatusOK, messages.SuccessfulUserUpdate, updatedUser)
 	return
 }

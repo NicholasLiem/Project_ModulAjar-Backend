@@ -2,11 +2,14 @@ package repository
 
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
 )
 
 type UserQuery interface {
 	CreateUser(user datastruct.UserModel) (*uint, error)
-	UpdateUser(user datastruct.UserModel) error
+	UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error)
+	DeleteUser(userID uint) (*datastruct.UserModel, error)
+	GetUser(userID uint) (*datastruct.UserModel, error)
 }
 
 type userQuery struct{}
@@ -15,6 +18,7 @@ func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
 	db := DB
 
 	newUser := datastruct.UserModel{
+		UserID:   user.UserID,
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
@@ -27,40 +31,45 @@ func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
 	return &newUser.ID, nil
 }
 
-func (u *userQuery) UpdateUser(user datastruct.UserModel) error {
+func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error) {
 	db := DB
 	err := db.Model(datastruct.UserModel{}).Where("user_id = ?", user.UserID).Updates(user).Error
-	return err
+
+	var updatedUser datastruct.UserModel
+	err = db.Where("user_id = ?", user.UserID).First(&updatedUser).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedUser, err
 }
 
-//func (u *userQuery) GetUser(condition interface{}) (datastruct.UserModel, error) {
-//	db := DB
-//	err := db.Where(condition).First().Error
-//	return model, err
-//}
+func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
+	db := DB
+	var userData datastruct.UserModel
+	err := db.Model(datastruct.UserModel{}).Where("user_id = ?", userID).First(&userData).Error
+	if err != nil {
+		return nil, err
+	}
 
-//func SaveOneUser(data interface{}) error {
-//	db := DB
-//	err := db.Save(data).Error
-//	return err
-//}
-//
-//func CreateUser(data interface{}) error {
-//	db := DB
-//	err := db.Create(data).Error
-//	return err
-//}
-//
-//func (model *UserModel) Update(data interface{}) error {
-//	db := DB
-//	err := db.Model(model).Updates(data).Error
-//	return err
-//}
-//
-//func (model *UserModel) Delete() error {
-//	db := DB
-//	return db.Delete(model).Error
-//}
+	/**
+	Perform hard delete, if you want to soft delete, delete the Unscoped function
+	*/
+	err = db.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &userData, err
+}
+
+func (u *userQuery) GetUser(userID uint) (*datastruct.UserModel, error) {
+	db := DB
+
+	var userData datastruct.UserModel
+	err := db.Where("user_id = ?", userID).First(&userData).Error
+	return &userData, err
+}
 
 //func (model *UserModel) AddDocument(data interface{}) error {
 //	db := database.DB
