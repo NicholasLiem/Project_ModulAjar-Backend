@@ -28,7 +28,7 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	userModel := datastruct.UserModel{
-		UserID:   uint(userID),
+		UserID:   userID,
 		Username: newUser.Username,
 		Email:    newUser.Email,
 		Password: newUser.Password,
@@ -36,7 +36,7 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 
 	err = m.userService.CreateUser(userModel)
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, "Fail to create user")
+		response.ErrorResponse(w, http.StatusInternalServerError, "Fail to create user"+err.Error())
 		return
 	}
 

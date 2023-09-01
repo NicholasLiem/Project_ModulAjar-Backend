@@ -8,7 +8,7 @@ import (
 type UserQuery interface {
 	CreateUser(user datastruct.UserModel) (*uint, error)
 	UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error)
-	DeleteUser(user datastruct.UserModel) error
+	DeleteUser(userID uint) (*datastruct.UserModel, error)
 	GetUser(userID uint) (*datastruct.UserModel, error)
 }
 
@@ -44,10 +44,23 @@ func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, e
 	return &updatedUser, err
 }
 
-func (u *userQuery) DeleteUser(user datastruct.UserModel) error {
+func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 	db := DB
-	err := db.Where("user_id = ?", user.UserID).Delete(&datastruct.UserModel{}).Error
-	return err
+	var userData datastruct.UserModel
+	err := db.Model(datastruct.UserModel{}).Where("user_id = ?", userID).First(&userData).Error
+	if err != nil {
+		return nil, err
+	}
+
+	/**
+	Perform hard delete, if you want to soft delete, delete the Unscoped function
+	*/
+	err = db.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &userData, err
 }
 
 func (u *userQuery) GetUser(userID uint) (*datastruct.UserModel, error) {

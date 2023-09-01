@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="933a09d9-8915-4a5c-8ed7-7ca68f6e8032" name="Changes" comment="" />
+    <list default="true" id="933a09d9-8915-4a5c-8ed7-7ca68f6e8032" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/infrastucture/routers/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/infrastucture/routers/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/create_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/create_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/app/update_user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/update_user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/datastruct/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/datastruct/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/dto/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/dto/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,5 +79,16 @@
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/app/update_user.go</url>
+          <line>12</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

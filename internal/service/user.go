@@ -10,6 +10,8 @@ import (
 type UserService interface {
 	CreateUser(user datastruct.UserModel) error
 	UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error)
+	DeleteUser(userID uint) (*datastruct.UserModel, error)
+	GetUser(userID uint) (*datastruct.UserModel, error)
 }
 
 type userService struct {
@@ -42,55 +44,12 @@ func (u *userService) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel,
 	return updatedUser, err
 }
 
-//func FindUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
-//	params := mux.Vars(r)
-//	id := params["user_id"]
-//
-//	userID, err := VerifyUserId(id)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid user ID")
-//		return
-//	}
-//
-//	condition := datastruct.UserModel{UserID: uint(userID)}
-//
-//	foundUser, err := datastruct.FindOneUser(condition)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
-//		return
-//	}
-//
-//	response.SuccessResponse(rw, http.StatusOK, "User found", foundUser)
-//	return
-//}
+func (u *userService) DeleteUser(userID uint) (*datastruct.UserModel, error) {
+	userData, err := u.dao.NewUserQuery().DeleteUser(userID)
+	return userData, err
+}
 
-//func DeleteUserByIdHandler(rw http.ResponseWriter, r *http.Request) {
-//	params := mux.Vars(r)
-//	id := params["user_id"]
-//
-//	userID, err := VerifyUserId(id)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusBadRequest, "Invalid user ID")
-//		return
-//	}
-//
-//	condition := datastruct.UserModel{UserID: uint(userID)}
-//
-//	foundUser, err := datastruct.FindOneUser(condition)
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusNotFound, "User not found")
-//		return
-//	}
-//
-//	userData := foundUser
-//
-//	err = foundUser.Delete()
-//	if err != nil {
-//		response.ErrorResponse(rw, http.StatusInternalServerError, "Fail to delete user")
-//		return
-//	}
-//
-//	response.SuccessResponse(rw, http.StatusOK, "User deleted", userData)
-//	return
-//}
-//
+func (u *userService) GetUser(userID uint) (*datastruct.UserModel, error) {
+	userData, err := u.dao.NewUserQuery().GetUser(userID)
+	return userData, err
+}
