@@ -33,12 +33,14 @@ func main() {
 	*/
 	dao := repository.NewDAO()
 	userService := service.NewUserService(dao)
+	authService := service.NewAuthService(dao)
 
 	/**
 	Registering Services to Server
 	*/
 	server := app.NewMicroservice(
 		userService,
+		authService,
 	)
 
 	/**

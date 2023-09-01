@@ -1,8 +1,11 @@
 package routers
 
-import "github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
+import (
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
+)
 
-func AuthRoutes() router.RoutePrefix {
+func AuthRoutes(server app.MicroserviceServer) router.RoutePrefix {
 	return router.RoutePrefix{
 		Prefix: "/v1/auth",
 		SubRoutes: []router.Route{
@@ -10,14 +13,14 @@ func AuthRoutes() router.RoutePrefix {
 				"Login",
 				"POST",
 				"/login",
-				nil,
+				server.Login,
 				false,
 			},
 			{
 				"Register",
 				"POST",
-				"/register/{user_id}",
-				nil,
+				"/register",
+				server.Register,
 				false,
 			},
 		},

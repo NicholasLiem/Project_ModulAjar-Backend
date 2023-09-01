@@ -10,6 +10,8 @@ const (
 	FailToCreateUser   = "Failed to create new user"
 	FailToDeleteUser   = "Failed to delete a user"
 	FailToUpdateUser   = "Failed to update user"
+	UnsuccessfulLogin  = "Login attempt failed"
+	FailToRegister     = "Registration attempt failed"
 )
 
 /*
@@ -21,4 +23,6 @@ const (
 	SuccessfulUserCreation = "Successfully created a new user"
 	SuccessfulUserDeletion = "Successfully deleted a new user"
 	SuccessfulUserUpdate   = "Successfully updated a user"
+	SuccessfulLogin        = "Successfully logged in"
+	SuccessfulRegister     = "Successfully registered a user"
 )
