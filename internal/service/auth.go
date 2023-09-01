@@ -32,7 +32,6 @@ func (a *authService) SignIn(loginDTO dto.LoginDTO) (*string, error) {
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(*password), []byte(loginDTO.Password))
-
 	if err != nil {
 		return nil, fmt.Errorf("passwords dont match %v", err)
 	} else {

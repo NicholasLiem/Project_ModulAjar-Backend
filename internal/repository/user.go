@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
 	"gorm.io/gorm"
@@ -76,7 +75,6 @@ func (u *userQuery) GetUser(userID uint) (*datastruct.UserModel, error) {
 func (u *userQuery) GetUserPasswordByEmail(email string) (*string, error) {
 	var password string
 	err := u.db.Model(&datastruct.UserModel{}).Where("email = ?", email).Select("password").Scan(&password).Error
-	fmt.Println(password)
 	if err != nil {
 		return nil, err
 	}
