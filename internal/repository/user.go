@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
+	"gorm.io/gorm"
 )
 
 type UserQuery interface {
@@ -10,21 +11,25 @@ type UserQuery interface {
 	UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error)
 	DeleteUser(userID uint) (*datastruct.UserModel, error)
 	GetUser(userID uint) (*datastruct.UserModel, error)
+	GetUserPasswordByEmail(email string) (*string, error)
 }
 
-type userQuery struct{}
+type userQuery struct {
+	db *gorm.DB
+}
+
+func NewUserQuery(db *gorm.DB) UserQuery {
+	return &userQuery{db: db}
+}
 
 func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
-	db := DB
-
 	newUser := datastruct.UserModel{
 		UserID:   user.UserID,
-		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
 	}
 
-	if err := db.Create(&newUser).Error; err != nil {
+	if err := u.db.Create(&newUser).Error; err != nil {
 		return nil, err
 	}
 
@@ -32,11 +37,10 @@ func (u *userQuery) CreateUser(user datastruct.UserModel) (*uint, error) {
 }
 
 func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error) {
-	db := DB
-	err := db.Model(datastruct.UserModel{}).Where("user_id = ?", user.UserID).Updates(user).Error
+	err := u.db.Model(datastruct.UserModel{}).Where("user_id = ?", user.UserID).Updates(user).Error
 
 	var updatedUser datastruct.UserModel
-	err = db.Where("user_id = ?", user.UserID).First(&updatedUser).Error
+	err = u.db.Where("user_id = ?", user.UserID).First(&updatedUser).Error
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +49,8 @@ func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, e
 }
 
 func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
-	db := DB
 	var userData datastruct.UserModel
-	err := db.Model(datastruct.UserModel{}).Where("user_id = ?", userID).First(&userData).Error
+	err := u.db.Model(datastruct.UserModel{}).Where("user_id = ?", userID).First(&userData).Error
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +58,7 @@ func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 	/**
 	Perform hard delete, if you want to soft delete, delete the Unscoped function
 	*/
-	err = db.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
+	err = u.db.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
 	if err != nil {
 		return nil, err
 	}
@@ -64,11 +67,15 @@ func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 }
 
 func (u *userQuery) GetUser(userID uint) (*datastruct.UserModel, error) {
-	db := DB
-
 	var userData datastruct.UserModel
-	err := db.Where("user_id = ?", userID).First(&userData).Error
+	err := u.db.Where("user_id = ?", userID).First(&userData).Error
 	return &userData, err
+}
+
+func (u *userQuery) GetUserPasswordByEmail(email string) (*string, error) {
+	var password string
+	err := u.db.Model(&datastruct.UserModel{}).Where("email = ?", email).Select("password").Scan(&password).Error
+	return &password, err
 }
 
 //func (model *UserModel) AddDocument(data interface{}) error {

@@ -14,6 +14,7 @@ type DAO interface {
 }
 
 type dao struct {
+	db *gorm.DB
 }
 
 var DB *gorm.DB
@@ -26,7 +27,7 @@ var DisableLogger = logger.New(
 )
 
 func NewDAO() DAO {
-	return &dao{}
+	return &dao{db: DB}
 }
 
 func SetupDB() *gorm.DB {
@@ -60,5 +61,5 @@ func SetupDB() *gorm.DB {
 }
 
 func (d *dao) NewUserQuery() UserQuery {
-	return &userQuery{}
+	return NewUserQuery(d.db)
 }
