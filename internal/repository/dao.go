@@ -16,7 +16,7 @@ type DAO interface {
 }
 
 type dao struct {
-	db    *gorm.DB
+	pgdb  *gorm.DB
 	redis *redis.Client
 }
 
@@ -29,7 +29,7 @@ var DisableLogger = logger.New(
 
 func NewDAO(db *gorm.DB, rc *redis.Client) DAO {
 	return &dao{
-		db:    db,
+		pgdb:  db,
 		redis: rc,
 	}
 }
@@ -82,5 +82,5 @@ func SetupRedis(ctx context.Context) *redis.Client {
 }
 
 func (d *dao) NewUserQuery() UserQuery {
-	return NewUserQuery(d.db)
+	return NewUserQuery(d.pgdb, d.redis)
 }

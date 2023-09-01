@@ -1,9 +1,13 @@
 package repository
 
 import (
+	"context"
+	"encoding/json"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
+	"log"
 )
 
 type UserQuery interface {
@@ -16,11 +20,15 @@ type UserQuery interface {
 }
 
 type userQuery struct {
-	db *gorm.DB
+	pgdb  *gorm.DB
+	redis *redis.Client
 }
 
-func NewUserQuery(db *gorm.DB) UserQuery {
-	return &userQuery{db: db}
+func NewUserQuery(pgdb *gorm.DB, redis *redis.Client) UserQuery {
+	return &userQuery{
+		pgdb:  pgdb,
+		redis: redis,
+	}
 }
 
 func (u *userQuery) CreateUser(user datastruct.UserModel) (*datastruct.UserModel, error) {
@@ -32,17 +40,17 @@ func (u *userQuery) CreateUser(user datastruct.UserModel) (*datastruct.UserModel
 		Password:  user.Password,
 	}
 
-	if err := u.db.Create(&newUser).Error; err != nil {
+	if err := u.pgdb.Create(&newUser).Error; err != nil {
 		return nil, err
 	}
 	return &newUser, nil
 }
 
 func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, error) {
-	err := u.db.Model(datastruct.UserModel{}).Where("user_id = ?", user.UserID).Updates(user).Error
+	err := u.pgdb.Model(datastruct.UserModel{}).Where("user_id = ?", user.UserID).Updates(user).Error
 
 	var updatedUser datastruct.UserModel
-	err = u.db.Where("user_id = ?", user.UserID).First(&updatedUser).Error
+	err = u.pgdb.Where("user_id = ?", user.UserID).First(&updatedUser).Error
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +60,7 @@ func (u *userQuery) UpdateUser(user dto.UpdateUserDTO) (*datastruct.UserModel, e
 
 func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 	var userData datastruct.UserModel
-	err := u.db.Model(datastruct.UserModel{}).Where("user_id = ?", userID).First(&userData).Error
+	err := u.pgdb.Model(datastruct.UserModel{}).Where("user_id = ?", userID).First(&userData).Error
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +68,7 @@ func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 	/**
 	Perform hard delete, if you want to soft delete, delete the Unscoped function
 	*/
-	err = u.db.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
+	err = u.pgdb.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
 	if err != nil {
 		return nil, err
 	}
@@ -70,19 +78,42 @@ func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 
 func (u *userQuery) GetUser(userID uint) (*datastruct.UserModel, error) {
 	var userData datastruct.UserModel
-	err := u.db.Where("user_id = ?", userID).First(&userData).Error
+	err := u.pgdb.Where("user_id = ?", userID).First(&userData).Error
 	return &userData, err
 }
 
 func (u *userQuery) GetUserPasswordByEmail(email string) (*string, error) {
 	var password string
-	err := u.db.Model(&datastruct.UserModel{}).Where("email = ?", email).Select("password").Scan(&password).Error
+	err := u.pgdb.Model(&datastruct.UserModel{}).Where("email = ?", email).Select("password").Scan(&password).Error
 	return &password, err
 }
 
 func (u *userQuery) GetUserByEmail(email string) (*datastruct.UserModel, error) {
+	userDataFromRedis, err := u.redis.Get(context.Background(), email).Result()
+	if err == nil {
+		var userData datastruct.UserModel
+		if err := json.Unmarshal([]byte(userDataFromRedis), &userData); err != nil {
+			return nil, err
+		}
+		return &userData, nil
+	}
+
 	var userData datastruct.UserModel
-	err := u.db.Where("email = ?", email).First(&userData).Error
+	err = u.pgdb.Where("email = ?", email).First(&userData).Error
+	if err != nil {
+		return nil, err
+	}
+
+	userDataJSON, err := json.Marshal(userData)
+	if err != nil {
+		return nil, err
+	}
+
+	err = u.redis.Set(context.Background(), email, userDataJSON, 0).Err()
+	if err != nil {
+		log.Printf("Failed to set user data in Redis: %s", err.Error())
+	}
+
 	return &userData, err
 }
 
