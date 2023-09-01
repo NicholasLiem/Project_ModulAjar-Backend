@@ -5,6 +5,7 @@ import (
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils"
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
+	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -16,7 +17,7 @@ func (m *MicroserviceServer) UpdateUser(w http.ResponseWriter, r *http.Request) 
 
 	userID, err := utils.VerifyUserId(paramsUserID)
 	if err != nil {
-		response.ErrorResponse(w, http.StatusBadRequest, "Fail to parse user ID")
+		response.ErrorResponse(w, http.StatusBadRequest, messages.FailToParseUserID)
 		return
 	}
 
@@ -24,16 +25,16 @@ func (m *MicroserviceServer) UpdateUser(w http.ResponseWriter, r *http.Request) 
 	err = json.NewDecoder(r.Body).Decode(&updateUser)
 	updateUser.UserID = userID
 	if err != nil {
-		response.ErrorResponse(w, http.StatusBadRequest, "Fail to update user "+err.Error())
+		response.ErrorResponse(w, http.StatusBadRequest, messages.InvalidRequestData)
 		return
 	}
 
 	updatedUser, err := m.userService.UpdateUser(updateUser)
 	if err != nil || updatedUser == nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, "Fail to update user "+err.Error())
+		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToUpdateUser)
 		return
 	}
 
-	response.SuccessResponse(w, http.StatusOK, "Successfully updated the user", updatedUser)
+	response.SuccessResponse(w, http.StatusOK, messages.SuccessfulUserUpdate, updatedUser)
 	return
 }

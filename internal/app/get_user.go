@@ -20,6 +20,6 @@ func (m *MicroserviceServer) GetUserData(w http.ResponseWriter, r *http.Request)
 	}
 
 	userData, err := m.userService.GetUser(userID)
-	response.SuccessResponse(w, http.StatusOK, messages.SuccessfullDataObtain, userData)
+	response.SuccessResponse(w, http.StatusOK, messages.SuccessfulUserObtain, userData)
 	return
 }
