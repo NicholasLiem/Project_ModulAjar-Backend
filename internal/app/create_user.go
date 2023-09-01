@@ -30,7 +30,6 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 
 	userModel := datastruct.UserModel{
 		UserID:   userID,
-		Username: newUser.Username,
 		Email:    newUser.Email,
 		Password: newUser.Password,
 	}
