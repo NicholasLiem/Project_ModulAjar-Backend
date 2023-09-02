@@ -25,18 +25,3 @@ func ParseUserIDClaim(ctx context.Context) (jwt.MapClaims, uint64, error) {
 
 	return claims, issuerUserID, nil
 }
-
-func HasLoggedIn(ctx context.Context) (jwt.MapClaims, bool, error) {
-	claims, ok := ctx.Value("jwtClaims").(jwt.MapClaims)
-	if !ok {
-		return nil, false, fmt.Errorf("JWT claims not found")
-	}
-
-	_, ok = claims["logged_in"].(string)
-	if !ok {
-		return nil, false, fmt.Errorf("JWT claim 'user_id' is not a string")
-	}
-
-	return claims, true, nil
-
-}

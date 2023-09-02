@@ -14,6 +14,7 @@ import (
 type SessionManager interface {
 	CreateUserSession(user datastruct.UserModel) error
 	GetUserSession(userId string) (bool, error)
+	DeleteUserSession(userId string) error
 }
 
 type sessionManager struct {
@@ -64,4 +65,12 @@ func (s *sessionManager) GetUserSession(userId string) (bool, error) {
 	}
 
 	return sessionUser.Authenticated, nil
+}
+
+func (s *sessionManager) DeleteUserSession(userId string) error {
+	_, err := s.redisClient.Del(context.Background(), userId).Result()
+	if err != nil {
+		log.Fatalf("Failed to delete key: %v", err)
+	}
+	return nil
 }

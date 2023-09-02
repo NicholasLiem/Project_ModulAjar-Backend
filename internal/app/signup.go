@@ -9,7 +9,6 @@ import (
 )
 
 func (m *MicroserviceServer) Register(w http.ResponseWriter, r *http.Request) {
-
 	var userModel datastruct.UserModel
 	err := json.NewDecoder(r.Body).Decode(&userModel)
 	if err != nil {

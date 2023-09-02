@@ -23,6 +23,13 @@ func AuthRoutes(server app.MicroserviceServer) router.RoutePrefix {
 				server.Register,
 				false,
 			},
+			{
+				"Logout",
+				"POST",
+				"/logout",
+				server.Logout,
+				true,
+			},
 		},
 	}
 }
