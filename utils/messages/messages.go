@@ -15,6 +15,7 @@ const (
 	JWTClaimError        = "JWT claim error"
 	AllFieldMustBeFilled = "All field must be filled"
 	AlreadyLoggedIn      = "Already logged in"
+	TooManyRequest       = "Too many request"
 )
 
 /*

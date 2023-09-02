@@ -9,6 +9,7 @@ import (
 )
 
 func (m *MicroserviceServer) Register(w http.ResponseWriter, r *http.Request) {
+
 	var userModel datastruct.UserModel
 	err := json.NewDecoder(r.Body).Decode(&userModel)
 	if err != nil {
@@ -16,20 +17,20 @@ func (m *MicroserviceServer) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//_, isLoggedIn, err := jwt2.HasLoggedIn(r.Context())
-	//if !isLoggedIn {
-	//	response.ErrorResponse(w, http.StatusBadRequest, messages.AlreadyLoggedIn)
-	//	return
-	//}
-
 	if userModel.Email == "" || userModel.FirstName == "" || userModel.LastName == "" || userModel.Password == "" {
 		response.ErrorResponse(w, http.StatusBadRequest, messages.AllFieldMustBeFilled)
 		return
 	}
 
-	token, err := m.authService.SignUp(userModel)
+	userData, token, err := m.authService.SignUp(userModel)
 	if err != nil {
 		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToRegister)
+		return
+	}
+
+	err = m.sessionService.CreateUserSession(*userData)
+	if err != nil {
+		response.ErrorResponse(w, http.StatusForbidden, messages.AlreadyLoggedIn)
 		return
 	}
 

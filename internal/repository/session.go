@@ -4,15 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
-	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"log"
+	"os"
+	"strconv"
 	"time"
 )
 
 type SessionManager interface {
-	CreateUserSession(user datastruct.UserModel) (*string, error)
-	GetUserSession(sessionID string) (bool, error)
+	CreateUserSession(user datastruct.UserModel) error
+	GetUserSession(userId string) (bool, error)
 }
 
 type sessionManager struct {
@@ -25,30 +26,29 @@ func NewSessionManager(client *redis.Client) SessionManager {
 	}
 }
 
-func (s *sessionManager) CreateUserSession(user datastruct.UserModel) (*string, error) {
-	sessionID := uuid.New().String()
-
+func (s *sessionManager) CreateUserSession(user datastruct.UserModel) error {
 	sessionUser := datastruct.SessionUserClient{
-		UserID:        user.UserID,
 		Authenticated: true,
-		Role:          string(user.Role),
 	}
 
 	sessionUserJSON, err := json.Marshal(sessionUser)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	err = s.redisClient.Set(context.Background(), sessionID, sessionUserJSON, 180*time.Second).Err()
+	sessionTimeStr := os.Getenv("SESSION_TIME")
+	sessionTime, err := strconv.ParseUint(sessionTimeStr, 10, 64)
 	if err != nil {
-		log.Printf("Failed to set session data in redis %s", err.Error())
+		return err
 	}
 
-	return &sessionID, nil
+	err = s.redisClient.Set(context.Background(), strconv.Itoa(int(user.UserID)), sessionUserJSON, time.Duration(sessionTime)*time.Second).Err()
+
+	return nil
 }
 
-func (s *sessionManager) GetUserSession(sessionID string) (bool, error) {
-	sessionUserJSON, err := s.redisClient.Get(context.Background(), sessionID).Result()
+func (s *sessionManager) GetUserSession(userId string) (bool, error) {
+	sessionUserJSON, err := s.redisClient.Get(context.Background(), userId).Result()
 	if err != nil {
 		if err == redis.Nil {
 			return false, nil
