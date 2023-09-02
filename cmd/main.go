@@ -41,6 +41,7 @@ func main() {
 	dao := repository.NewDAO(db, redis)
 	userService := service.NewUserService(dao)
 	authService := service.NewAuthService(dao)
+	sessionService := service.NewSessionService(dao)
 
 	/**
 	Registering Services to Server
@@ -48,6 +49,7 @@ func main() {
 	server := app.NewMicroservice(
 		userService,
 		authService,
+		sessionService,
 	)
 
 	/**

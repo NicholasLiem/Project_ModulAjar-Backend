@@ -16,15 +16,15 @@ func (m *MicroserviceServer) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//_, isLoggedIn, err := jwt2.HasLoggedIn(r.Context())
-	//if !isLoggedIn {
-	//	response.ErrorResponse(w, http.StatusBadRequest, messages.AlreadyLoggedIn)
-	//	return
-	//}
-
-	token, err := m.authService.SignIn(loginDTO)
+	userData, token, err := m.authService.SignIn(loginDTO)
 	if err != nil {
 		response.ErrorResponse(w, http.StatusUnauthorized, messages.UnsuccessfulLogin)
+		return
+	}
+
+	err = m.sessionService.CreateUserSession(*userData)
+	if err != nil {
+		response.ErrorResponse(w, http.StatusForbidden, messages.AlreadyLoggedIn)
 		return
 	}
 

@@ -66,7 +66,7 @@ func (u *userQuery) DeleteUser(userID uint) (*datastruct.UserModel, error) {
 	}
 
 	/**
-	Perform hard delete, if you want to soft delete, delete the Unscoped function
+	Perform hard delete, if you want to soft-delete, delete the Unscoped function
 	*/
 	err = u.pgdb.Unscoped().Where("user_id = ?", userID).Delete(&userData).Error
 	if err != nil {
