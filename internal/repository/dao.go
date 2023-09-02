@@ -13,6 +13,7 @@ import (
 
 type DAO interface {
 	NewUserQuery() UserQuery
+	NewSessionManager() SessionManager
 }
 
 type dao struct {
@@ -83,4 +84,8 @@ func SetupRedis(ctx context.Context) *redis.Client {
 
 func (d *dao) NewUserQuery() UserQuery {
 	return NewUserQuery(d.pgdb, d.redis)
+}
+
+func (d *dao) NewSessionManager() SessionManager {
+	return NewSessionManager(d.redis)
 }

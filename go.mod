@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/go-pdf/fpdf v0.8.0
 	github.com/golang-jwt/jwt/v5 v5.0.0
+	github.com/google/uuid v1.3.1
 	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.5.1
 	github.com/redis/go-redis/v9 v9.1.0
