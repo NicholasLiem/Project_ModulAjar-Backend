@@ -10,6 +10,7 @@ import (
 type SessionService interface {
 	CreateUserSession(user datastruct.UserModel) error
 	GetUserSession(sessionID string) (bool, error)
+	InvalidateUserSession(userId string) error
 }
 
 type sessionService struct {
@@ -37,4 +38,8 @@ func (s *sessionService) CreateUserSession(user datastruct.UserModel) error {
 
 func (s *sessionService) GetUserSession(userId string) (bool, error) {
 	return s.dao.NewSessionManager().GetUserSession(userId)
+}
+
+func (s *sessionService) InvalidateUserSession(userId string) error {
+	return s.dao.NewSessionManager().DeleteUserSession(userId)
 }

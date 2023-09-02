@@ -17,6 +17,7 @@ func (m *MicroserviceServer) GetUserData(w http.ResponseWriter, r *http.Request)
 		response.ErrorResponse(w, http.StatusBadRequest, messages.FailToParseUserID)
 		return
 	}
+
 	_, issuerUserID, err := jwt2.ParseUserIDClaim(r.Context())
 	if err != nil {
 		response.ErrorResponse(w, http.StatusInternalServerError, messages.JWTClaimError)
