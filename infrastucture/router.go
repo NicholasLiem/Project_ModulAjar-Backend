@@ -33,6 +33,10 @@ func NewRouter(server app.MicroserviceServer) *mux.Router {
 				handler = middleware.Middleware(subRoute.HandlerFunc) // use middleware
 			}
 
+			//if subRoute.LimitRequest {
+			//	handler = middleware.CheckExistingSession(handler)
+			//}
+
 			//register the route
 			routePrefix.Path(subRoute.Pattern).Handler(handler).Methods(subRoute.Method).Name(subRoute.Name)
 		}

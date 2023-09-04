@@ -1,33 +1,26 @@
 package jwt
 
 import (
-	"os"
-	"time"
-
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/golang-jwt/jwt/v5"
+	"os"
 )
 
 type JWTToken struct {
 	Token string `json:"token"`
 }
 
-func CreateJWT(userID, email, role string) (JWTToken, error) {
+func CreateJWT(payload datastruct.JWTPayload) (JWTToken, error) {
 
 	signingKey := []byte(os.Getenv("JWT_SECRET"))
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id":   userID,
-		"email":     email,
-		"role":      role,
-		"logged_in": true,
-		"exp":       time.Now().Add(time.Hour).Unix(),
-	})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 
 	tokenString, err := token.SignedString(signingKey)
 
 	return JWTToken{Token: tokenString}, err // Fixed token structure and variable name
 }
 
-func VerifyJWT(tokenStr string) (jwt.Claims, error) {
+func VerifyJWT(tokenStr string) (*datastruct.JWTPayload, error) {
 	signingKey := []byte(os.Getenv("JWT_SECRET"))
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		return signingKey, nil
@@ -37,5 +30,10 @@ func VerifyJWT(tokenStr string) (jwt.Claims, error) {
 		return nil, err
 	}
 
-	return token.Claims, nil // Return claims directly
+	claims, ok := token.Claims.(*datastruct.JWTPayload)
+	if !ok {
+		return nil, err // Handle the type assertion failure
+	}
+
+	return claims, nil // Return claims directly
 }

@@ -14,6 +14,7 @@ func DocumentRoute() router.RoutePrefix {
 				"/generate",
 				nil,
 				false,
+				false,
 			},
 		},
 	}

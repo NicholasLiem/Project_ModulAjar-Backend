@@ -17,7 +17,6 @@ func Middleware(next http.Handler) http.Handler {
 		}
 
 		claims, err := jwt2.VerifyJWT(tokenStr)
-
 		if err != nil {
 			response.ErrorResponse(rw, http.StatusUnauthorized, messages.JWTClaimError)
 			return

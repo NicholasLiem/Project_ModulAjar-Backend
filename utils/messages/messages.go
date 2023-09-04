@@ -15,6 +15,8 @@ const (
 	JWTClaimError        = "JWT claim error"
 	AllFieldMustBeFilled = "All field must be filled"
 	AlreadyLoggedIn      = "Already logged in"
+	SessionInvalid       = "Session is invalid"
+	NoSession            = "No session registered"
 )
 
 /*

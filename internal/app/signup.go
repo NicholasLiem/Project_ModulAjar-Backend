@@ -21,15 +21,9 @@ func (m *MicroserviceServer) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userData, token, err := m.authService.SignUp(userModel)
+	token, err := m.authService.SignUp(userModel)
 	if err != nil {
 		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToRegister)
-		return
-	}
-
-	err = m.sessionService.CreateUserSession(*userData)
-	if err != nil {
-		response.ErrorResponse(w, http.StatusForbidden, messages.AlreadyLoggedIn)
 		return
 	}
 

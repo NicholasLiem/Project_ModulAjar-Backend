@@ -15,6 +15,7 @@ func UserRoutes(server app.MicroserviceServer) router.RoutePrefix {
 				"/{user_id}",
 				server.CreateUser,
 				true,
+				false,
 			},
 			{
 				"Update a user",
@@ -22,6 +23,7 @@ func UserRoutes(server app.MicroserviceServer) router.RoutePrefix {
 				"/{user_id}",
 				server.UpdateUser,
 				true,
+				false,
 			},
 			{
 				"Delete a user",
@@ -29,6 +31,7 @@ func UserRoutes(server app.MicroserviceServer) router.RoutePrefix {
 				"/{user_id}",
 				server.DeleteUser,
 				true,
+				false,
 			},
 			{
 				"Get user data",
@@ -36,6 +39,7 @@ func UserRoutes(server app.MicroserviceServer) router.RoutePrefix {
 				"/{user_id}",
 				server.GetUserData,
 				true,
+				false,
 			},
 		},
 	}
