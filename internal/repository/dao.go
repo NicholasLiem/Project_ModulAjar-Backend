@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/v9"
+	"github.com/sashabaranov/go-openai"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,11 +15,13 @@ import (
 
 type DAO interface {
 	NewUserQuery() UserQuery
+	NewInputSuggestionQuery() InputSuggestionQuery
 }
 
 type dao struct {
-	pgdb  *gorm.DB
-	redis *redis.Client
+	pgdb   *gorm.DB
+	redis  *redis.Client
+	openAI *openai.Client
 }
 
 var DisableLogger = logger.New(
@@ -28,10 +31,11 @@ var DisableLogger = logger.New(
 	},
 )
 
-func NewDAO(db *gorm.DB, rc *redis.Client) DAO {
+func NewDAO(db *gorm.DB, rc *redis.Client, openai *openai.Client) DAO {
 	return &dao{
-		pgdb:  db,
-		redis: rc,
+		pgdb:   db,
+		redis:  rc,
+		openAI: openai,
 	}
 }
 
@@ -87,6 +91,14 @@ func SetupRedis(ctx context.Context) *redis.Client {
 	return client
 }
 
+func SetupOpenAI() *openai.Client {
+	return openai.NewClient(os.Getenv("OPENAI_API_KEY"))
+}
+
 func (d *dao) NewUserQuery() UserQuery {
 	return NewUserQuery(d.pgdb, d.redis)
+}
+
+func (d *dao) NewInputSuggestionQuery() InputSuggestionQuery {
+	return NewInputSuggestionQuery(d.openAI)
 }

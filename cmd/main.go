@@ -34,14 +34,15 @@ func main() {
 	*/
 	db := repository.SetupDB()
 	redis := repository.SetupRedis(ctx)
+	openai := repository.SetupOpenAI()
 
 	/**
 	Registering DAO's and Services
 	*/
-	dao := repository.NewDAO(db, redis)
+	dao := repository.NewDAO(db, redis, openai)
 	userService := service.NewUserService(dao)
 	authService := service.NewAuthService(dao)
-	//sessionService := service.NewSessionService(dao)
+	inputSuggestionService := service.NewInputSuggestionService(dao)
 
 	/**
 	Registering Services to Server
@@ -49,6 +50,7 @@ func main() {
 	server := app.NewMicroservice(
 		userService,
 		authService,
+		inputSuggestionService,
 	)
 
 	/**
