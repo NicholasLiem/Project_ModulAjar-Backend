@@ -5,7 +5,6 @@ import (
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/dto"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils"
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
-	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -21,9 +20,21 @@ func (m *MicroserviceServer) UpdateUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	_, issuerUserID, err := jwt2.ParseUserIDClaim(r.Context())
+	/**
+	Parsing Session Data from Context
+	*/
+	sessionUser, err := utils.ParseSessionUserFromContext(r.Context())
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, messages.JWTClaimError)
+		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToParseCookie)
+		return
+	}
+
+	/**
+	Took the issuer identifier
+	*/
+	issuerId, err := utils.VerifyUserId(sessionUser.UserID)
+	if err != nil {
+		response.ErrorResponse(w, http.StatusBadRequest, messages.FailToParseUserID)
 		return
 	}
 
@@ -35,7 +46,7 @@ func (m *MicroserviceServer) UpdateUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	updatedUser, err := m.userService.UpdateUser(updateUser, uint(issuerUserID))
+	updatedUser, err := m.userService.UpdateUser(updateUser, issuerId)
 	if err != nil || updatedUser == nil {
 		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToUpdateUser)
 		return

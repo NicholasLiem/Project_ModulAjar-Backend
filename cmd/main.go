@@ -63,7 +63,7 @@ func main() {
 	/**
 	Setting up the router
 	*/
-	serverRouter := infrastucture.NewRouter(*server)
+	serverRouter := infrastucture.NewRouter(*server, *redis)
 
 	/**
 	Running the server

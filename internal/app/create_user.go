@@ -43,7 +43,7 @@ func (m *MicroserviceServer) CreateUser(w http.ResponseWriter, r *http.Request) 
 
 	err = m.userService.CreateUser(userModel)
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToCreateUser+err.Error())
+		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToCreateUser)
 		return
 	}
 

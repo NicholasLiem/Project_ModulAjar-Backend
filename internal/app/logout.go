@@ -2,20 +2,21 @@ package app
 
 import (
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
-	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"net/http"
-	"strconv"
 )
 
 func (m *MicroserviceServer) Logout(w http.ResponseWriter, r *http.Request) {
-	_, issuerUserID, err := jwt2.ParseUserIDClaim(r.Context())
+
+	sessionIdCookie, err := r.Cookie("sessionId")
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, messages.JWTClaimError)
+		response.ErrorResponse(w, http.StatusForbidden, messages.SessionExpired)
 		return
 	}
 
-	err = m.sessionService.InvalidateUserSession(strconv.FormatUint(issuerUserID, 10))
+	sessionId := sessionIdCookie.Value
+
+	err = m.sessionService.InvalidateUserSession(sessionId)
 	if err != nil {
 		response.ErrorResponse(w, http.StatusInternalServerError, messages.InvalidRequestData)
 		return

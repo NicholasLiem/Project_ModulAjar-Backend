@@ -8,9 +8,10 @@ import (
 )
 
 type SessionService interface {
-	CreateUserSession(user datastruct.UserModel) error
-	GetUserSession(sessionID string) (bool, error)
-	InvalidateUserSession(userId string) error
+	CreateUserSession(user datastruct.UserModel) (*string, error)
+	GetUserSession(sessionId string) (bool, error)
+	InvalidateUserSession(sessionId string) error
+	GetSessionData(sessionId string) (*datastruct.SessionUserClient, error)
 }
 
 type sessionService struct {
@@ -23,23 +24,27 @@ func NewSessionService(dao repository.DAO) SessionService {
 	}
 }
 
-func (s *sessionService) CreateUserSession(user datastruct.UserModel) error {
+func (s *sessionService) CreateUserSession(user datastruct.UserModel) (*string, error) {
 	isLoggedIn, err := s.dao.NewSessionManager().GetUserSession(strconv.Itoa(int(user.UserID)))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if isLoggedIn == true {
-		return errors.New("already logged in")
+		return nil, errors.New("already logged in")
 	}
 
 	return s.dao.NewSessionManager().CreateUserSession(user)
 }
 
-func (s *sessionService) GetUserSession(userId string) (bool, error) {
-	return s.dao.NewSessionManager().GetUserSession(userId)
+func (s *sessionService) GetUserSession(sessionId string) (bool, error) {
+	return s.dao.NewSessionManager().GetUserSession(sessionId)
 }
 
-func (s *sessionService) InvalidateUserSession(userId string) error {
-	return s.dao.NewSessionManager().DeleteUserSession(userId)
+func (s *sessionService) GetSessionData(sessionId string) (*datastruct.SessionUserClient, error) {
+	return s.dao.NewSessionManager().GetSessionData(sessionId)
+}
+
+func (s *sessionService) InvalidateUserSession(sessionId string) error {
+	return s.dao.NewSessionManager().DeleteUserSession(sessionId)
 }

@@ -3,7 +3,6 @@ package app
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/utils"
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
-	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -18,13 +17,25 @@ func (m *MicroserviceServer) DeleteUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	_, issuerUserID, err := jwt2.ParseUserIDClaim(r.Context())
+	/**
+	Parsing Session Data from Context
+	*/
+	sessionUser, err := utils.ParseSessionUserFromContext(r.Context())
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, messages.JWTClaimError)
+		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToParseCookie)
 		return
 	}
 
-	userData, err := m.userService.DeleteUser(userID, uint(issuerUserID))
+	/**
+	Took the issuer identifier
+	*/
+	issuerId, err := utils.VerifyUserId(sessionUser.UserID)
+	if err != nil {
+		response.ErrorResponse(w, http.StatusBadRequest, messages.FailToParseUserID)
+		return
+	}
+
+	userData, err := m.userService.DeleteUser(userID, issuerId)
 	if err != nil {
 		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToDeleteUser)
 		return

@@ -6,10 +6,11 @@ import (
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/routers"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 	"github.com/gorilla/mux"
+	"github.com/redis/go-redis/v9"
 	"net/http"
 )
 
-func NewRouter(server app.MicroserviceServer) *mux.Router {
+func NewRouter(server app.MicroserviceServer, redisClient redis.Client) *mux.Router {
 
 	router := mux.NewRouter()
 
@@ -31,7 +32,7 @@ func NewRouter(server app.MicroserviceServer) *mux.Router {
 			handler = subRoute.HandlerFunc
 
 			if subRoute.Protected {
-				handler = middleware.Middleware(subRoute.HandlerFunc) // use middleware
+				handler = middleware.Middleware(subRoute.HandlerFunc, &redisClient) // use middleware
 			}
 
 			//register the route

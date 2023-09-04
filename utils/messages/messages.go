@@ -15,6 +15,10 @@ const (
 	JWTClaimError        = "JWT claim error"
 	AllFieldMustBeFilled = "All field must be filled"
 	AlreadyLoggedIn      = "Already logged in"
+	FailToParseCookie    = "Fail to parse Cookie"
+	SessionExpired       = "The session is already expired"
+	FailToUnMarshalData  = "Fail to unmarshal data"
+	FailToEncodeCookie   = "Fail to encode cookie"
 )
 
 /*

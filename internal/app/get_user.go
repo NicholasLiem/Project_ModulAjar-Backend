@@ -3,13 +3,15 @@ package app
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/utils"
 	response "github.com/NicholasLiem/ModulAjar_Backend/utils/http"
-	jwt2 "github.com/NicholasLiem/ModulAjar_Backend/utils/jwt"
 	"github.com/NicholasLiem/ModulAjar_Backend/utils/messages"
 	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func (m *MicroserviceServer) GetUserData(w http.ResponseWriter, r *http.Request) {
+	/**
+	Checking params
+	*/
 	params := mux.Vars(r)
 	paramsUserID := params["user_id"]
 	requestedUserID, err := utils.VerifyUserId(paramsUserID)
@@ -18,13 +20,28 @@ func (m *MicroserviceServer) GetUserData(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	_, issuerUserID, err := jwt2.ParseUserIDClaim(r.Context())
+	/**
+	Parsing Session Data from Context
+	*/
+	sessionUser, err := utils.ParseSessionUserFromContext(r.Context())
 	if err != nil {
-		response.ErrorResponse(w, http.StatusInternalServerError, messages.JWTClaimError)
+		response.ErrorResponse(w, http.StatusInternalServerError, messages.FailToParseCookie)
 		return
 	}
 
-	userData, err := m.userService.GetUser(requestedUserID, uint(issuerUserID))
+	/**
+	Took the issuer identifier
+	*/
+	issuerId, err := utils.VerifyUserId(sessionUser.UserID)
+	if err != nil {
+		response.ErrorResponse(w, http.StatusBadRequest, messages.FailToParseUserID)
+		return
+	}
+
+	/**
+	Process the request
+	*/
+	userData, err := m.userService.GetUser(requestedUserID, issuerId)
 	response.SuccessResponse(w, http.StatusOK, messages.SuccessfulUserObtain, userData)
 	return
 }
