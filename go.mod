@@ -8,6 +8,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.5.1
 	github.com/redis/go-redis/v9 v9.1.0
+	github.com/sashabaranov/go-openai v1.15.1
 	golang.org/x/crypto v0.12.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.3

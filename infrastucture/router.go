@@ -16,6 +16,7 @@ func NewRouter(server app.MicroserviceServer) *mux.Router {
 	customRouter.AppRoutes = append(customRouter.AppRoutes,
 		routers.UserRoutes(server),
 		routers.AuthRoutes(server),
+		routers.InputSuggestionRoutes(server),
 	)
 
 	for _, route := range customRouter.AppRoutes {
