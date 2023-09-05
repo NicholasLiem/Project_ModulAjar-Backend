@@ -107,3 +107,7 @@ func (d *dao) NewSessionManager() SessionManager {
 func (d *dao) NewInputSuggestionQuery() InputSuggestionQuery {
 	return NewInputSuggestionQuery(d.openAI)
 }
+
+func (d *dao) NewDocumentQuery() DocumentQuery {
+	return NewDocumentQuery(d.pgdb)
+}
