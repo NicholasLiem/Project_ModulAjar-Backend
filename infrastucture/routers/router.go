@@ -1,9 +1,7 @@
-package infrastucture
+package routers
 
 import (
 	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/middleware"
-	customRouter "github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
-	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/routers"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 	"github.com/gorilla/mux"
 	"github.com/redis/go-redis/v9"
@@ -14,13 +12,14 @@ func NewRouter(server app.MicroserviceServer, redisClient redis.Client) *mux.Rou
 
 	router := mux.NewRouter()
 
-	customRouter.AppRoutes = append(customRouter.AppRoutes,
-		routers.UserRoutes(server),
-		routers.AuthRoutes(server),
-		routers.InputSuggestionRoutes(server),
+	AppRoutes = append(AppRoutes,
+		UserRoutes(server),
+		AuthRoutes(server),
+		InputSuggestionRoutes(server),
+		DocumentRoute(server),
 	)
 
-	for _, route := range customRouter.AppRoutes {
+	for _, route := range AppRoutes {
 
 		//create sub route
 		routePrefix := router.PathPrefix(route.Prefix).Subrouter()

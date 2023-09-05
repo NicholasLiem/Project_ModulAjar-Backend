@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture"
+	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/routers"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/datastruct"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/repository"
@@ -44,6 +44,7 @@ func main() {
 	authService := service.NewAuthService(dao)
 	sessionService := service.NewSessionService(dao)
 	inputSuggestionService := service.NewInputSuggestionService(dao)
+	documentService := service.NewDocumentService(dao)
 
 	/**
 	Registering Services to Server
@@ -53,6 +54,7 @@ func main() {
 		authService,
 		sessionService,
 		inputSuggestionService,
+		documentService,
 	)
 
 	/**
@@ -63,7 +65,7 @@ func main() {
 	/**
 	Setting up the router
 	*/
-	serverRouter := infrastucture.NewRouter(*server, *redis)
+	serverRouter := routers.NewRouter(*server, *redis)
 
 	/**
 	Running the server

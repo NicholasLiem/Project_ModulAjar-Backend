@@ -1,14 +1,13 @@
 package routers
 
 import (
-	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
 	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 )
 
-func UserRoutes(server app.MicroserviceServer) router.RoutePrefix {
-	return router.RoutePrefix{
+func UserRoutes(server app.MicroserviceServer) RoutePrefix {
+	return RoutePrefix{
 		Prefix: "/v1/user",
-		SubRoutes: []router.Route{
+		SubRoutes: []Route{
 			{
 				"Create a new user",
 				"POST",

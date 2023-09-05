@@ -1,19 +1,19 @@
 package routers
 
 import (
-	"github.com/NicholasLiem/ModulAjar_Backend/infrastucture/router"
+	"github.com/NicholasLiem/ModulAjar_Backend/internal/app"
 )
 
-func DocumentRoute() router.RoutePrefix {
-	return router.RoutePrefix{
+func DocumentRoute(server app.MicroserviceServer) RoutePrefix {
+	return RoutePrefix{
 		Prefix: "/v1/pdf",
-		SubRoutes: []router.Route{
+		SubRoutes: []Route{
 			{
 				"Generate PDF",
 				"POST",
 				"/generate",
-				nil,
-				false,
+				server.Logout,
+				true,
 			},
 		},
 	}

@@ -7,17 +7,20 @@ type MicroserviceServer struct {
 	authService            service.AuthService
 	sessionService         service.SessionService
 	inputSuggestionService service.InputSuggestionService
+	documentService        service.DocumentService
 }
 
 func NewMicroservice(
 	userService service.UserService,
 	authService service.AuthService,
 	sessionService service.SessionService,
-	inputSuggestionService service.InputSuggestionService) *MicroserviceServer {
+	inputSuggestionService service.InputSuggestionService,
+	documentService service.DocumentService) *MicroserviceServer {
 	return &MicroserviceServer{
 		userService:            userService,
 		authService:            authService,
 		sessionService:         sessionService,
 		inputSuggestionService: inputSuggestionService,
+		documentService:        documentService,
 	}
 }
